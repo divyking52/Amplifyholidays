@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+/* Amplify Holidays — light brand theme */
+:root {
+  --brand: #248232;
+  --brand-soft: #2f9a40;
+  --brand-mist: #d8eedc;
+  --brand-wash: #eef7f0;
+
+  --surface: #ffffff;
+  --surface-soft: #f5faf6;
+  --surface-muted: #e8f1ea;
+
+  --ink: #0d1f12;
+  --ink-deep: #07140a;
+  --muted: #67768e;
+  --line: rgba(13, 31, 18, 0.1);
+
+  --gold: #248232;
+  --gold-soft: #2f9a40;
+  --sea: #1e6b3a;
+  --foam: #ffffff;
+  --background: #f5faf6;
+  --foreground: #0d1f12;
+}
+
+@theme inline {
+  --color-background: #f5faf6;
+  --color-foreground: #0d1f12;
+  --font-sans: var(--font-body);
+}
+
+html {
+  scroll-behavior: auto;
+  background: #f5faf6;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+body {
+  background: #f5faf6 !important;
+  color: #0d1f12 !important;
+  font-family: var(--font-body), system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+.font-display {
+  font-family: var(--font-display), Georgia, serif;
+}
+
+.font-body {
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+::selection {
+  background: color-mix(in srgb, #248232 35%, transparent);
+  color: #0d1f12;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (pointer: fine) {
+  body.has-custom-cursor,
+  body.has-custom-cursor a,
+  body.has-custom-cursor button {
+    cursor: none;
+  }
+}

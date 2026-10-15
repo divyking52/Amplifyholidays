@@ -1,0 +1,1730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amplify Holidays — Customised Journeys</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Syne:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/js/lenis.css" />
+  <style>
+    :root {
+      --brand: #248232;
+      --brand-soft: #2f9a40;
+      --brand-mist: #d8eedc;
+      --brand-wash: #eef7f0;
+      --surface: #ffffff;
+      --surface-soft: #f5faf6;
+      --ink: #0d1f12;
+      --ink-deep: #07140a;
+      --muted: #67768e;
+      --line: rgba(13, 31, 18, 0.1);
+      --font-display: "Syne", Georgia, serif;
+      --font-body: "Outfit", system-ui, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: auto; background: var(--surface-soft); }
+    html.lenis, html.lenis body { height: auto; }
+    .lenis.lenis-smooth { scroll-behavior: auto !important; }
+    body {
+      background: var(--surface-soft);
+      color: var(--ink);
+      font-family: var(--font-body);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    body.has-custom-cursor, body.has-custom-cursor a, body.has-custom-cursor button { cursor: none; }
+    img, video { display: block; }
+    .hero-bg img,
+    .hero-mobile-bg img,
+    .spot-slide img,
+    .style-card img,
+    .hero-video-layer video {
+      width: 100%;
+      height: 100%;
+      max-width: none;
+      object-fit: cover;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; border: none; background: none; cursor: pointer; }
+    .font-display { font-family: var(--font-display); }
+    .font-body { font-family: var(--font-body); }
+    ::selection { background: color-mix(in srgb, #248232 35%, transparent); color: var(--ink); }
+
+    /* Cursor */
+    .cursor {
+      pointer-events: none;
+      position: fixed;
+      top: 0; left: 0;
+      z-index: 200;
+      opacity: 0;
+    }
+    .cursor-ring {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 14px; height: 14px;
+      border-radius: 999px;
+      border: 1px solid var(--brand);
+      background: var(--brand);
+      will-change: width, height;
+    }
+    .cursor-label {
+      font-family: var(--font-display);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .cursor-label.is-on { opacity: 1; }
+
+    /* Nav */
+    .nav {
+      pointer-events: none;
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 50;
+    }
+    .nav-inner {
+      pointer-events: auto;
+      max-width: 1600px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+    }
+    @media (min-width: 768px) { .nav-inner { padding: 20px 40px; } }
+    .nav-logo, .nav-whatsapp, .nav-links a {
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      backdrop-filter: blur(12px);
+    }
+    .nav-logo {
+      background: rgba(255,255,255,0.8);
+      font-family: var(--font-display);
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      box-shadow: 0 1px 3px rgba(13,31,18,0.06);
+    }
+    .nav-links {
+      display: none;
+      align-items: center;
+      gap: 4px;
+      background: rgba(255,255,255,0.8);
+      border-radius: 999px;
+      padding: 8px;
+      box-shadow: 0 1px 3px rgba(13,31,18,0.06);
+    }
+    @media (min-width: 768px) { .nav-links { display: flex; } }
+    .nav-links a {
+      color: rgba(13,31,18,0.7);
+      transition: background 0.3s, color 0.3s;
+    }
+    .nav-links a:hover { background: var(--brand-wash); color: var(--brand); }
+    .nav-whatsapp {
+      background: var(--brand);
+      color: #fff;
+      font-family: var(--font-display);
+      transition: background 0.3s;
+    }
+    .nav-whatsapp:hover { background: var(--brand-soft); }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 52px;
+      min-width: 11.5rem;
+      padding: 14px 28px;
+      border-radius: 14px;
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      transition: background 0.3s, border-color 0.3s, color 0.3s, box-shadow 0.3s;
+      will-change: transform;
+    }
+    .btn-primary {
+      background: var(--brand);
+      color: #fff;
+      border: 1px solid transparent;
+      box-shadow: 0 10px 28px rgba(36,130,50,0.28);
+    }
+    .btn-primary:hover {
+      background: var(--brand-soft);
+      box-shadow: 0 14px 34px rgba(36,130,50,0.34);
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--ink);
+      border: 1px solid rgba(13,31,18,0.18);
+    }
+    .btn-ghost:hover {
+      border-color: var(--brand);
+      background: var(--brand-wash);
+      color: var(--brand);
+    }
+    .btn-arrow { display: inline-block; will-change: transform; }
+
+    .curtain {
+      position: relative;
+      z-index: 10;
+      background: var(--surface-soft);
+      box-shadow: 0 -24px 60px rgba(13,31,18,0.08);
+    }
+
+    /* Hero */
+    #top {
+      position: relative;
+      display: flex;
+      height: 100svh;
+      width: 100%;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: var(--surface-soft);
+    }
+    .hero-video-layer {
+      pointer-events: none;
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      will-change: transform;
+    }
+    .hero-video-layer video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.25);
+      filter: blur(36px) saturate(1.05) brightness(1.15);
+    }
+    .hero-video-wash {
+      position: absolute; inset: 0;
+      background: rgba(255,255,255,0.55);
+    }
+    .hero-video-rad {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center, transparent 20%, rgba(245,250,246,0.9) 100%);
+    }
+    .hero-media-wrap {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .hero-media {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      transform-origin: 50% 50%;
+      transform: scale(0.42);
+      border-radius: 24px;
+      box-shadow: 0 24px 80px rgba(13,31,18,0.18);
+      will-change: transform;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      transform: scale(1.15);
+      will-change: transform;
+    }
+    .hero-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .hero-bg-grad {
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(13,31,18,0.35) 0%, rgba(13,31,18,0.12) 40%, rgba(13,31,18,0.5) 100%);
+    }
+    .hero-copy {
+      position: relative;
+      z-index: 10;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 24px;
+      text-align: center;
+    }
+    .hero-mobile-bg {
+      display: none;
+      pointer-events: none;
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+    .hero-mobile-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .hero-mobile-bg .shade {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(7,20,10,0.45) 0%, rgba(7,20,10,0.28) 45%, rgba(7,20,10,0.55) 100%);
+    }
+    @media (max-width: 767px) {
+      .hero-mobile-bg { display: block; }
+      .hero-video-layer { display: none !important; }
+    }
+    .hero-eyebrow {
+      margin-bottom: 24px;
+      font-size: 11px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--brand-mist);
+    }
+    @media (min-width: 768px) { .hero-eyebrow { color: var(--brand); } }
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 7vw, 6.5rem);
+      line-height: 0.95;
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      color: #fff;
+    }
+    @media (min-width: 768px) { .hero-title { color: var(--ink); } }
+    .hero-word {
+      display: inline-block;
+      margin-right: 0.28em;
+      white-space: nowrap;
+      will-change: transform;
+    }
+    .hero-word:last-child { margin-right: 0; }
+    .hero-word.is-white { color: #fff; }
+    .hero-char-clip {
+      display: inline-block;
+      overflow: hidden;
+      vertical-align: bottom;
+      padding-bottom: 0.08em;
+    }
+    .hero-char {
+      display: inline-block;
+      will-change: transform;
+    }
+    .hero-content {
+      margin-top: 32px;
+      max-width: 36rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.88);
+      padding: 24px;
+      box-shadow: 0 12px 40px rgba(13,31,18,0.08);
+      backdrop-filter: blur(12px);
+    }
+    @media (min-width: 768px) { .hero-content { padding: 28px 32px; } }
+    .hero-sub {
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--ink);
+    }
+    @media (min-width: 768px) { .hero-sub { font-size: 18px; } }
+    .hero-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      width: 100%;
+      flex-direction: column;
+      gap: 12px;
+    }
+    @media (min-width: 640px) {
+      .hero-ctas {
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+      }
+      .hero-ctas .btn { min-width: 12.5rem; }
+    }
+    .hero-scroll {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      z-index: 10;
+      display: flex;
+      transform: translateX(-50%);
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .hero-scroll span:first-child {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+    }
+    @media (min-width: 768px) {
+      .hero-scroll span:first-child { color: var(--muted); }
+    }
+    .hero-scroll-line {
+      display: block;
+      width: 1px;
+      height: 40px;
+      background: rgba(255,255,255,0.5);
+      transform-origin: top;
+    }
+    @media (min-width: 768px) {
+      .hero-scroll-line { background: rgba(36,130,50,0.4); }
+    }
+
+    /* Value */
+    #promise {
+      position: relative;
+      display: flex;
+      min-height: 100svh;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: var(--surface);
+      padding: 96px 24px;
+    }
+    @media (min-width: 768px) { #promise { padding: 96px 64px; } }
+    #promise .glow {
+      pointer-events: none;
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center, rgba(36,130,50,0.08), transparent 55%);
+    }
+    #promise .inner { position: relative; max-width: 64rem; margin: 0 auto; }
+    #promise .eyebrow {
+      margin-bottom: 40px;
+      font-size: 11px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--brand);
+    }
+    #promise .vp-text {
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 4.2vw, 3.4rem);
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+    }
+    .vp-word {
+      display: inline-block;
+      margin-right: 0.28em;
+      will-change: opacity, color;
+    }
+
+    /* Travel styles */
+    #styles {
+      position: relative;
+      overflow: hidden;
+      background: var(--surface-soft);
+      padding: 96px 24px;
+    }
+    @media (min-width: 768px) { #styles { padding: 112px 40px; } }
+    #styles .glow {
+      pointer-events: none;
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 20% 0%, rgba(36,130,50,0.08), transparent 50%);
+    }
+    #styles .wrap { position: relative; z-index: 10; max-width: 72rem; margin: 0 auto; }
+    #styles .head {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    @media (min-width: 768px) {
+      #styles .head {
+        flex-direction: row;
+        align-items: flex-end;
+        justify-content: space-between;
+      }
+    }
+    #styles .eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--brand);
+    }
+    #styles h2 {
+      margin-top: 12px;
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 5.5vw, 4.25rem);
+      line-height: 0.95;
+      font-weight: 500;
+      letter-spacing: -0.03em;
+    }
+    #styles .lede {
+      max-width: 24rem;
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+    @media (min-width: 768px) {
+      #styles .lede { text-align: right; font-size: 16px; }
+    }
+    .styles-grid {
+      margin-top: 48px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    @media (min-width: 768px) {
+      .styles-grid {
+        margin-top: 64px;
+        grid-template-columns: repeat(12, 1fr);
+        grid-auto-rows: 280px;
+        gap: 20px;
+      }
+      .style-card.wide { grid-column: span 7; }
+      .style-card.tall { grid-column: span 5; }
+    }
+    .style-card {
+      position: relative;
+      min-height: 280px;
+      overflow: hidden;
+      border-radius: 22px;
+    }
+    .style-card img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s ease;
+    }
+    .style-card:hover img { transform: scale(1.05); }
+    .style-card .shade {
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(7,20,10,0.15) 0%, rgba(7,20,10,0.25) 40%, rgba(7,20,10,0.78) 100%);
+      transition: background 0.5s;
+    }
+    .style-card .body {
+      position: absolute; inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 24px;
+    }
+    @media (min-width: 768px) { .style-card .body { padding: 32px; } }
+    .style-card .num {
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--brand-mist);
+    }
+    .style-card .cta-hint {
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: transparent;
+      transition: color 0.3s;
+    }
+    .style-card:hover .cta-hint { color: rgba(255,255,255,0.8); }
+    .style-card .top-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .style-card .label {
+      font-size: 11px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--brand-mist);
+    }
+    .style-card h3 {
+      margin-top: 4px;
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3.25rem);
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      color: #fff;
+      font-weight: 500;
+    }
+    .style-card .blurb {
+      margin-top: 12px;
+      max-width: 24rem;
+      font-size: 14px;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.7);
+    }
+
+    /* Destinations */
+    #destinations {
+      position: relative;
+      overflow: hidden;
+      background: var(--ink-deep);
+    }
+    .dest-desktop { display: block; position: relative; min-height: 100svh; }
+    .dest-slides { position: absolute; inset: 0; }
+    .spot-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      will-change: transform, opacity;
+    }
+    .spot-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .dest-grad {
+      pointer-events: none;
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(7,20,10,0.45) 0%, rgba(7,20,10,0.12) 38%, rgba(7,20,10,0.72) 100%);
+    }
+    .dest-ui {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      min-height: 100svh;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 112px 24px 32px;
+    }
+    @media (min-width: 768px) { .dest-ui { padding: 112px 40px 40px; } }
+    @media (min-width: 1024px) { .dest-ui { padding: 128px 64px 48px; } }
+    .dest-eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--brand-mist);
+    }
+    .dest-counter-row {
+      margin-top: 16px;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+    }
+    .spot-counter { color: #fff; }
+    .dest-copy-wrap {
+      position: relative;
+      max-width: 48rem;
+      padding-bottom: 8px;
+    }
+    .spot-copy {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .spot-copy h2 {
+      font-family: var(--font-display);
+      font-size: clamp(3.5rem, 8vw, 7rem);
+      line-height: 0.92;
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      color: #fff;
+    }
+    .spot-meta {
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 20px;
+    }
+    .spot-meta p {
+      font-size: 14px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--brand-mist);
+    }
+    .spot-meta a {
+      font-size: 14px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #fff;
+      text-decoration: underline;
+      text-underline-offset: 8px;
+      text-decoration-color: rgba(255,255,255,0.35);
+    }
+    .dest-spacer {
+      visibility: hidden;
+      font-family: var(--font-display);
+      font-size: clamp(3.5rem, 8vw, 7rem);
+      line-height: 0.92;
+    }
+    .dest-progress-track {
+      width: 100%;
+      height: 1px;
+      background: rgba(255,255,255,0.2);
+    }
+    .spot-progress {
+      height: 1px;
+      width: 100%;
+      background: var(--brand-mist);
+      transform-origin: left center;
+      transform: scaleX(0.125);
+      will-change: transform;
+    }
+    .dest-tabs {
+      margin-top: 20px;
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+    @media (min-width: 1024px) {
+      .dest-tabs {
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 12px;
+        overflow: visible;
+      }
+    }
+    .spot-tab {
+      flex-shrink: 0;
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #fff;
+      opacity: 0.4;
+      transition: opacity 0.3s;
+    }
+    .spot-tab:hover { opacity: 0.8; }
+    /* Love / testimonials */
+    #love {
+      position: relative;
+      overflow: hidden;
+      background: var(--brand-wash);
+      padding: 96px 24px;
+    }
+    @media (min-width: 768px) { #love { padding: 112px 40px; } }
+    #love .glow {
+      pointer-events: none;
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 70% 20%, rgba(36,130,50,0.1), transparent 55%);
+    }
+    #love .wrap { position: relative; max-width: 64rem; margin: 0 auto; }
+    #love .intro {
+      max-width: 42rem;
+      margin: 0 auto;
+      text-align: center;
+    }
+    #love .eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--brand);
+    }
+    #love h2 {
+      margin-top: 16px;
+      font-family: var(--font-display);
+      font-size: clamp(1.875rem, 4vw, 3rem);
+      letter-spacing: -0.03em;
+    }
+    #love .sub {
+      margin-top: 12px;
+      font-size: 16px;
+      color: var(--muted);
+    }
+    @media (min-width: 768px) { #love .sub { font-size: 18px; } }
+    .stack-wrap {
+      position: relative;
+      max-width: 36rem;
+      margin: 56px auto 0;
+    }
+    .stack-stage {
+      position: relative;
+      height: 440px;
+    }
+    @media (min-width: 768px) { .stack-stage { height: 460px; } }
+    .stack-card {
+      position: absolute;
+      left: 0; right: 0; top: 0;
+      display: flex;
+      flex-direction: column;
+      height: 380px;
+      border-radius: 28px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      padding: 32px;
+      box-shadow: 0 22px 60px rgba(13,31,18,0.1);
+      transform-origin: 50% 0%;
+    }
+    @media (min-width: 768px) {
+      .stack-card { height: 400px; padding: 40px; }
+    }
+    .stack-card.is-front { cursor: pointer; }
+    .stack-card .trip {
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--brand);
+    }
+    .stack-card .quote {
+      margin-top: 20px;
+      flex: 1;
+      overflow: hidden;
+      font-family: var(--font-display);
+      font-size: clamp(1.2rem, 2.3vw, 1.65rem);
+      line-height: 1.35;
+      letter-spacing: -0.02em;
+    }
+    .stack-card .foot {
+      margin-top: 24px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      border-top: 1px solid var(--line);
+      padding-top: 20px;
+    }
+    .stack-card .name { font-size: 14px; font-weight: 600; }
+    .stack-card .loc {
+      margin-top: 4px;
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .stack-card .count {
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .stack-controls {
+      margin-top: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+    .stack-nav {
+      display: flex;
+      width: 44px;
+      height: 44px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--ink);
+      transition: border-color 0.3s, color 0.3s;
+    }
+    .stack-nav:hover { border-color: var(--brand); color: var(--brand); }
+    .stack-dots { display: flex; align-items: center; gap: 6px; padding: 0 8px; }
+    .stack-dot {
+      height: 6px;
+      width: 6px;
+      border-radius: 999px;
+      background: rgba(13,31,18,0.2);
+      transition: all 0.3s;
+    }
+    .stack-dot.is-active {
+      width: 24px;
+      background: var(--brand);
+    }
+
+    /* Metrics */
+    #proof {
+      position: relative;
+      overflow: hidden;
+      background: var(--surface);
+      padding: 96px 0 128px;
+    }
+    .marquee-wrap { margin-bottom: 64px; overflow: hidden; }
+    .marquee-row {
+      display: flex;
+      width: max-content;
+      will-change: transform;
+    }
+    .marquee-row.b { margin-top: 8px; }
+    .marquee-word {
+      margin: 0 24px;
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 8vw, 7rem);
+      letter-spacing: -0.03em;
+      white-space: nowrap;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(36,130,50,0.45);
+    }
+    @media (min-width: 768px) { .marquee-word { margin: 0 40px; } }
+    .marquee-row.b .marquee-word {
+      color: rgba(13,31,18,0.06);
+      -webkit-text-stroke: 0;
+    }
+    .metrics-grid {
+      max-width: 72rem;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px 24px;
+      padding: 0 24px;
+    }
+    @media (min-width: 768px) {
+      .metrics-grid {
+        grid-template-columns: repeat(4, 1fr);
+        padding: 0 40px;
+      }
+    }
+    .metric {
+      border-top: 1px solid var(--line);
+      padding-top: 24px;
+    }
+    .metric-value {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      letter-spacing: -0.03em;
+      font-variant-numeric: tabular-nums;
+    }
+    @media (min-width: 768px) { .metric-value { font-size: 3.75rem; } }
+    .metric-label {
+      margin-top: 12px;
+      font-size: 11px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .metrics-note {
+      max-width: 42rem;
+      margin: 64px auto 0;
+      padding: 0 24px;
+      text-align: center;
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+    @media (min-width: 768px) { .metrics-note { font-size: 18px; } }
+
+    /* Footer */
+    #contact {
+      position: sticky;
+      bottom: 0;
+      z-index: 0;
+      display: flex;
+      min-height: 100svh;
+      flex-direction: column;
+      justify-content: flex-end;
+      overflow: hidden;
+      background: var(--brand-wash);
+    }
+    #contact .glow {
+      pointer-events: none;
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 70% 20%, rgba(36,130,50,0.18), transparent 50%);
+    }
+    #contact .inner {
+      position: relative;
+      z-index: 10;
+      max-width: 72rem;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+      padding: 80px 24px;
+    }
+    @media (min-width: 768px) { #contact .inner { padding: 96px 40px; } }
+    #contact .eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--brand);
+    }
+    #contact h2 {
+      margin-top: 16px;
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 6vw, 5rem);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      max-width: 48rem;
+    }
+    #contact .cta-row { display: flex; flex-wrap: wrap; gap: 16px; }
+    #contact .grid {
+      display: grid;
+      gap: 32px;
+      border-top: 1px solid var(--line);
+      padding-top: 40px;
+    }
+    @media (min-width: 768px) { #contact .grid { grid-template-columns: repeat(3, 1fr); } }
+    #contact .grid .label {
+      font-size: 11px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    #contact .grid .value {
+      margin-top: 8px;
+      display: block;
+      font-family: var(--font-display);
+      font-size: 20px;
+    }
+    #contact .copy {
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="cursor" id="cursor" aria-hidden="true">
+    <div class="cursor-ring" id="cursorRing">
+      <span class="cursor-label" id="cursorLabel">Drag / Scroll</span>
+    </div>
+  </div>
+
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="nav-logo" href="#top">Amplify Holidays</a>
+      <nav class="nav-links">
+        <a href="#styles">Styles</a>
+        <a href="#destinations">Destinations</a>
+        <a href="#love">Love</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <a class="nav-whatsapp" href="https://wa.me/919821900855" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+    </div>
+  </header>
+
+  <div class="curtain">
+    <main>
+      <!-- HERO -->
+      <section id="top">
+        <div class="hero-mobile-bg" aria-hidden="true">
+          <img src="https://admin.storebox.ai/media/5e25aa9d-84ae-4a87-a986-cebbc6aa41d2/20622bce-880b-4399-975a-2bca03a4cd2a/hero.jpg" alt="" />
+          <div class="shade"></div>
+        </div>
+        <div class="hero-video-layer" id="heroVideoLayer">
+          <video id="heroVideo" autoplay muted loop playsinline preload="metadata" poster="https://admin.storebox.ai/media/5e25aa9d-84ae-4a87-a986-cebbc6aa41d2/20622bce-880b-4399-975a-2bca03a4cd2a/hero.jpg">
+            <source src="https://admin.storebox.ai/media/5e25aa9d-84ae-4a87-a986-cebbc6aa41d2/e7f76b82-4e4a-466e-8ae2-010e5cb381d5/hero-ambient.mp4" type="video/mp4" />
+          </video>
+          <div class="hero-video-wash"></div>
+          <div class="hero-video-rad"></div>
+        </div>
+        <div class="hero-media-wrap">
+          <div class="hero-media" id="heroMedia">
+            <div class="hero-bg" id="heroBg">
+              <img src="https://admin.storebox.ai/media/5e25aa9d-84ae-4a87-a986-cebbc6aa41d2/20622bce-880b-4399-975a-2bca03a4cd2a/hero.jpg" alt="Wooden boat on a mountain lake" />
+              <div class="hero-bg-grad"></div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-copy">
+          <p class="hero-eyebrow font-body">Amplify Holidays</p>
+          <h1 class="hero-title" id="heroTitle"></h1>
+          <div class="hero-content" id="heroContent">
+            <p class="hero-sub font-body">Bespoke journeys across Dubai, Maldives, Thailand &amp; beyond — curated by destination experts who live for the details.</p>
+            <div class="hero-ctas">
+              <a class="btn btn-primary magnetic" href="#contact">Enquire Now <span class="btn-arrow">→</span></a>
+              <a class="btn btn-ghost magnetic" href="#destinations">Explore Destinations <span class="btn-arrow">→</span></a>
+            </div>
+          </div>
+        </div>
+        <div class="hero-scroll" id="heroScroll">
+          <span class="font-body">Scroll</span>
+          <span class="hero-scroll-line"></span>
+        </div>
+      </section>
+
+      <!-- VALUE / ABOUT -->
+      <section id="promise">
+        <div class="glow"></div>
+        <div class="inner">
+          <p class="eyebrow font-body">The Amplify Promise</p>
+          <p class="vp-text" id="vpText"></p>
+        </div>
+      </section>
+
+      <!-- TRAVEL STYLES -->
+      <section id="styles">
+        <div class="glow"></div>
+        <div class="wrap">
+          <div class="head style-reveal">
+            <div>
+              <p class="eyebrow font-body">Choose your</p>
+              <h2>Travel Style</h2>
+            </div>
+            <p class="lede font-body">Tell us how you travel — we shape the destination, pace, and details around it.</p>
+          </div>
+          <div class="styles-grid" id="stylesGrid"></div>
+        </div>
+      </section>
+
+      <!-- DESTINATIONS -->
+      <section id="destinations" aria-roledescription="carousel" aria-label="Best Seasonal Travel Hotspot">
+        <div class="dest-desktop">
+          <div class="dest-slides" id="destSlides"></div>
+          <div class="dest-grad"></div>
+          <div class="dest-ui">
+            <div>
+              <p class="dest-eyebrow font-body">Best Seasonal Travel Hotspot</p>
+              <div class="dest-counter-row font-body">
+                <span class="spot-counter">01</span>
+                <span aria-hidden="true">/</span>
+                <span id="destTotal">08</span>
+              </div>
+            </div>
+            <div class="dest-copy-wrap" id="destCopyWrap"></div>
+            <div>
+              <div class="dest-progress-track"><div class="spot-progress" id="destProgress"></div></div>
+              <div class="dest-tabs" role="tablist" aria-label="Destinations" id="destTabs"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TESTIMONIALS -->
+      <section id="love">
+        <div class="glow"></div>
+        <div class="wrap">
+          <div class="intro love-reveal">
+            <p class="eyebrow font-body">Traveller stories</p>
+            <h2>To Amplify Holidays, with Love</h2>
+            <p class="sub font-body">We don't like to brag, but our travelers are simply amazing!</p>
+          </div>
+          <div class="stack-wrap love-reveal">
+            <div class="stack-stage" id="stackStage" aria-live="polite"></div>
+            <div class="stack-controls">
+              <button type="button" class="stack-nav" id="stackPrev" aria-label="Previous story">←</button>
+              <div class="stack-dots" role="tablist" aria-label="Stories" id="stackDots"></div>
+              <button type="button" class="stack-nav" id="stackNext" aria-label="Next story">→</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- METRICS -->
+      <section id="proof">
+        <div class="marquee-wrap">
+          <div class="marquee-row a" id="marqueeA" aria-hidden="true"></div>
+          <div class="marquee-row b" id="marqueeB" aria-hidden="true"></div>
+        </div>
+        <div class="metrics-grid" id="metricsGrid"></div>
+        <p class="metrics-note font-body">We are a passionate bunch of holiday planners — destination experts with answers for every question, even the ones you are hesitant to ask.</p>
+      </section>
+    </main>
+  </div>
+
+  <footer id="contact">
+    <div class="glow"></div>
+    <div class="inner">
+      <div class="footer-reveal">
+        <p class="eyebrow font-body">Talk to Destination Expert</p>
+        <h2>For clarification and updates — our destination experts have answers for all your questions.</h2>
+      </div>
+      <div class="cta-row footer-reveal">
+        <a class="btn btn-primary magnetic" href="https://wa.me/919821900855" target="_blank" rel="noopener noreferrer">Connect on WhatsApp <span class="btn-arrow">→</span></a>
+        <a class="btn btn-ghost magnetic" href="mailto:hello@amplifyholidays.com">hello@amplifyholidays.com</a>
+      </div>
+      <div class="grid footer-reveal">
+        <div>
+          <p class="label font-body">Call</p>
+          <a class="value" href="tel:+91-9821900855">+91-9821900855</a>
+        </div>
+        <div>
+          <p class="label font-body">Write</p>
+          <a class="value" href="mailto:hello@amplifyholidays.com">hello@amplifyholidays.com</a>
+        </div>
+        <div>
+          <p class="label font-body">Brand</p>
+          <p class="value">Amplify Holidays</p>
+        </div>
+      </div>
+      <p class="copy footer-reveal font-body">© 2026 Amplify Holidays LLP | All Rights Reserved</p>
+    </div>
+  </footer>
+
+  <script src="assets/js/gsap.min.js"></script>
+  <script src="assets/js/ScrollTrigger.min.js"></script>
+  <script src="assets/js/lenis.min.js"></script>
+  <script>
+    (function () {
+      "use strict";
+
+      const DATA = {
+        tagline: "A Fusion of Futuristic Wonders and Timeless Charms",
+        value:
+          "Amplify Holidays is your go-to travel agency for unforgettable trips, offering customized packages for every need. Whether it's a family vacation, romantic getaway, or adventure, we ensure a seamless journey.",
+        styles: [
+          { title: "Honeymoon", subtitle: "Trip", blurb: "Private villas, quiet lagoons, and itineraries built for two.", href: "https://wa.me/919821900855?text=Hi%20Amplify%20Holidays%2C%20I%27d%20like%20to%20plan%20a%20honeymoon%20trip.", image: "https://admin.storebox.ai/media/5e25aa9d-84ae-4a87-a986-cebbc6aa41d2/4394d44c-f01f-4b97-8328-b6d99fbf6ffa/honeymoon.jpg", span: "wide" },
+          { title: "Family", subtitle: "Vacation", blurb: "Kid-friendly pacing with stays and activities that keep everyone happy.", href: "https://wa.me/919821900855?text=Hi%20Amplify%20Holidays%2C%20I%27d%20like%20to%20plan%20a%20family%20vacation.", image: "https://admin.storebox.ai/media/5e25aa9d-84ae-4a87-a986-cebbc6aa41d2/89d4e070-046d-4f0b-a995-55f8967228b5/family.jpg", span: "tall" },
+          { title: "Beach", subtitle: "Holiday", blurb: "Slow mornings, clear water, and nothing urgent on the calendar.", href: "https://wa.me/919821900855?text=Hi%20Amplify%20Holidays%2C%20I%27d%20like%20to%20plan%20a%20beach%20holiday.", image: "https://admin.storebox.ai/media/5e25aa9d-84ae-4a87-a986-cebbc6aa41d2/7c324b10-29d4-47c5-9948-2826a14c7197/beach.jpg", span: "tall" },
+          { title: "Adventure", subtitle: "Trails", blurb: "Dives, deserts, and days that feel earned — planned without the stress.", href: "https://wa.me/919821900855?text=Hi%20Amplify%20Holidays%2C%20I%27d%20like%20to%20plan%20an%20adventure%20trip.", image: "https://admin.storebox.ai/media/5e25aa9d-84ae-4a87-a986-cebbc6aa41d2/5525f84e-83ac-4d10-b833-402d24236075/adventure.jpg", span: "wide" },
+        ],
+        destinations: [
+          { name: "Dubai", price: "FROM ₹ 34,600 PER PERSON", href: "https://amplifyholidays.com/dubai", image: "https://admin.storebox.ai/media/5e25aa9d-84ae-4a87-a986-cebbc6aa41d2/aab4e3f1-a993-451f-998e-f04df284b011/dubai.jpg" },
+          { name: "Thailand", price: "FROM ₹ 14,600 PER PERSON", href: "https://amplifyholidays.com/thailand", image: "https://admin.storebox.ai/media/5e25aa9d-84ae-4a87-a986-cebbc6aa41d2/02e5845d-88de-4276-a1d2-2db7b6a109d5/thailand.jpg" },
+          { name: "Maldives", price: "FROM ₹ 58,600 PER PERSON", href: "https://amplifyholidays.com/maldives", image: "https://admin.storebox.ai/media/5e25aa9d-84ae-4a87-a986-cebbc6aa41d2/368035c9-b146-437f-8cdb-de5717ca86b2/maldives.jpg" },
+          { name: "Bali", price: "FROM ₹ 17,400 PER PERSON", href: "https://amplifyholidays.com/bali", image: "https://admin.storebox.ai/media/5e25aa9d-84ae-4a87-a986-cebbc6aa41d2/35d88d58-c847-42c8-929b-325eeac84170/bali.jpg" },
+          { name: "Singapore", price: "FROM ₹ 48,999 PER PERSON", href: "https://amplifyholidays.com/singapore", image: "https://admin.storebox.ai/media/5e25aa9d-84ae-4a87-a986-cebbc6aa41d2/0b138014-5a1f-4ebc-a516-683e39c743c0/singapore.jpg" },
+          { name: "Andaman", price: "FROM ₹ 24,200 PER PERSON", href: "https://amplifyholidays.com/andaman-and-nicobar", image: "https://admin.storebox.ai/media/5e25aa9d-84ae-4a87-a986-cebbc6aa41d2/dc73d0b9-929a-43aa-b7e8-bbcb878b255b/andaman.jpg" },
+          { name: "Mauritius", price: "FROM ₹ 27,800 PER PERSON", href: "https://amplifyholidays.com/mauritius", image: "https://admin.storebox.ai/media/5e25aa9d-84ae-4a87-a986-cebbc6aa41d2/e28274fb-d1b3-4e83-b8bd-ba81cdcb010e/mauritius.jpg" },
+          { name: "Kashmir", price: "FROM ₹ 14,300 PER PERSON", href: "https://amplifyholidays.com/kashmir", image: "https://admin.storebox.ai/media/5e25aa9d-84ae-4a87-a986-cebbc6aa41d2/c66857a2-259a-4e7d-b7ef-0d75d3e07afa/kashmir.jpg" },
+        ],
+        testimonials: [
+          { quote: "Amplify Holidays made our dream Maldives vacation a reality! From the stunning resort to the personalized itinerary, everything was taken care of perfectly. We couldn't have asked for a more seamless experience.", name: "Rohan & Priya S.", location: "Maharashtra", trip: "Maldives" },
+          { quote: "Our trip to Dubai was amazing, all thanks to Amplify Holidays. They handled every detail, from luxury accommodations to arranging a desert safari. The trip was hassle-free and unforgettable!", name: "Anjali & Rajesh K.", location: "Karnataka", trip: "Dubai" },
+          { quote: "As a solo traveler, I was nervous about planning a trip to Bali. Amplify Holidays created a package that perfectly balanced relaxation and adventure, making it one of the best vacations I've ever had.", name: "Karan M", location: "Delhi", trip: "Bali" },
+          { quote: "Planning a family trip to Singapore can be stressful, but Amplify Holidays took care of everything! Our kids loved the activities, and we loved the seamless planning. Will definitely book with them again!", name: "Shreya & Vikram G", location: "Tamil Nadu", trip: "Singapore" },
+          { quote: "Amplify Holidays made our Andaman getaway truly magical. They arranged exclusive activities and stunning beachfront accommodations. It was a stress-free and unforgettable trip!", name: "Neha S.", location: "Gujarat", trip: "Andaman" },
+          { quote: "From start to finish, Amplify Holidays provided exceptional service. Our Thailand trip was full of exciting adventures and beautiful resorts, and we didn't have to worry about a thing.", name: "Amit & Kavita R.", location: "", trip: "Thailand" },
+          { quote: "We had an amazing time in Mauritius, thanks to Amplify Holidays! They arranged everything, from flights to excursions, and made our honeymoon truly special.", name: "Ritika P.", location: "", trip: "Mauritius" },
+          { quote: "Our Kashmir vacation was perfect. Amplify Holidays organized everything seamlessly, from sightseeing to comfortable stays. We felt well taken care of throughout.", name: "Manish & Sonali T.", location: "Rajasthan", trip: "Kashmir" },
+        ],
+        metrics: [
+          { label: "Rated", value: 4.2, suffix: "", decimals: 1 },
+          { label: "Customised Trips", value: 100, suffix: "%", decimals: 0 },
+          { label: "Visa Success Rate", value: 95, suffix: "%", decimals: 0 },
+          { label: "Concierge", value: 24, suffix: "×7", decimals: 0 },
+        ],
+        marquee: ["DUBAI", "THAILAND", "MALDIVES", "BALI", "SINGAPORE", "ANDAMAN", "MAURITIUS", "KASHMIR"],
+      };
+
+      function prefersReducedMotion() {
+        return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      }
+
+
+      if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") {
+        console.error("GSAP or ScrollTrigger failed to load");
+        return;
+      }
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      /* ---------- Build DOM ---------- */
+      function buildHeroTitle() {
+        const h1 = document.getElementById("heroTitle");
+        DATA.tagline.split(" ").forEach((word) => {
+          const w = document.createElement("span");
+          w.className = "hero-word" + (word === "Charms" ? " is-white" : "");
+          const clip = document.createElement("span");
+          clip.className = "hero-char-clip";
+          word.split("").forEach((ch) => {
+            const c = document.createElement("span");
+            c.className = "hero-char";
+            c.textContent = ch;
+            clip.appendChild(c);
+          });
+          w.appendChild(clip);
+          h1.appendChild(w);
+        });
+      }
+
+      function buildValue() {
+        const el = document.getElementById("vpText");
+        DATA.value.split(" ").forEach((word) => {
+          const s = document.createElement("span");
+          s.className = "vp-word";
+          s.textContent = word;
+          el.appendChild(s);
+        });
+      }
+
+      function buildStyles() {
+        const grid = document.getElementById("stylesGrid");
+        DATA.styles.forEach((s, i) => {
+          const a = document.createElement("a");
+          a.className = "style-card style-reveal " + s.span;
+          a.href = s.href;
+          a.target = "_blank";
+          a.rel = "noopener noreferrer";
+          a.innerHTML =
+            '<img src="' + s.image + '" alt="' + s.title + " " + s.subtitle + '" />' +
+            '<div class="shade"></div>' +
+            '<div class="body">' +
+            '<div class="top-row"><span class="num font-body">' + String(i + 1).padStart(2, "0") + '</span><span class="cta-hint font-body">Plan on WhatsApp →</span></div>' +
+            '<div><p class="label font-body">' + s.title + '</p><h3>' + s.subtitle + '</h3><p class="blurb font-body">' + s.blurb + "</p></div>" +
+            "</div>";
+          grid.appendChild(a);
+        });
+      }
+
+      function buildDestinations() {
+        const slides = document.getElementById("destSlides");
+        const copy = document.getElementById("destCopyWrap");
+        const tabs = document.getElementById("destTabs");
+        document.getElementById("destTotal").textContent = String(DATA.destinations.length).padStart(2, "0");
+
+        let spacerDone = false;
+        DATA.destinations.forEach((d, i) => {
+          const slide = document.createElement("div");
+          slide.className = "spot-slide";
+          slide.style.opacity = i === 0 ? "1" : "0";
+          slide.innerHTML = '<img src="' + d.image + '" alt="' + d.name + '" />';
+          slides.appendChild(slide);
+
+          const panel = document.createElement("div");
+          panel.className = "spot-copy";
+          panel.style.opacity = i === 0 ? "1" : "0";
+          panel.style.pointerEvents = i === 0 ? "auto" : "none";
+          panel.innerHTML =
+            "<h2>" + d.name + "</h2>" +
+            '<div class="spot-meta"><p class="font-body">From ' + d.price.replace(/^FROM\s+/i, "") + '</p>' +
+            '<a href="' + d.href + '" target="_blank" rel="noopener noreferrer">View package</a></div>';
+          copy.appendChild(panel);
+
+          if (!spacerDone) {
+            const sp = document.createElement("div");
+            sp.className = "dest-spacer";
+            sp.setAttribute("aria-hidden", "true");
+            sp.innerHTML = "<h2>Singapore</h2><div style='margin-top:20px;height:24px'></div>";
+            copy.appendChild(sp);
+            spacerDone = true;
+          }
+
+          const tab = document.createElement("button");
+          tab.type = "button";
+          tab.className = "spot-tab font-body";
+          tab.setAttribute("role", "tab");
+          tab.setAttribute("aria-selected", i === 0 ? "true" : "false");
+          tab.textContent = d.name;
+          tabs.appendChild(tab);
+        });
+      }
+
+      function buildMetrics() {
+        const strip = DATA.marquee.concat(DATA.marquee);
+        ["marqueeA", "marqueeB"].forEach((id) => {
+          const row = document.getElementById(id);
+          strip.forEach((w) => {
+            const s = document.createElement("span");
+            s.className = "marquee-word";
+            s.textContent = w;
+            row.appendChild(s);
+          });
+        });
+        const grid = document.getElementById("metricsGrid");
+        DATA.metrics.forEach((m) => {
+          const div = document.createElement("div");
+          div.className = "metric";
+          div.innerHTML =
+            '<p class="metric-value" data-value="' + m.value + '" data-decimals="' + m.decimals + '" data-suffix="' + m.suffix + '">0' + m.suffix + "</p>" +
+            '<p class="metric-label font-body">' + m.label + "</p>";
+          grid.appendChild(div);
+        });
+      }
+
+      buildHeroTitle();
+      buildValue();
+      buildStyles();
+      buildDestinations();
+      buildMetrics();
+
+      /* ---------- Smooth scroll ---------- */
+      let lenis = null;
+      if (!prefersReducedMotion() && typeof Lenis !== "undefined") {
+        lenis = new Lenis({
+          duration: 1.15,
+          easing: function (t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
+          smoothWheel: true,
+          touchMultiplier: 1.4,
+        });
+        lenis.on("scroll", ScrollTrigger.update);
+        gsap.ticker.add(function (time) { lenis.raf(time * 1000); });
+        gsap.ticker.lagSmoothing(0);
+      }
+
+      document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
+        anchor.addEventListener("click", function (e) {
+          const id = anchor.getAttribute("href");
+          if (!id || id === "#") return;
+          const target = document.querySelector(id);
+          if (!target) return;
+          e.preventDefault();
+          if (lenis) lenis.scrollTo(target, { offset: 0 });
+          else target.scrollIntoView({ behavior: "smooth" });
+        });
+      });
+
+      /* ---------- Cursor ---------- */
+      (function initCursor() {
+        if (prefersReducedMotion()) return;
+        if (window.matchMedia("(pointer: coarse)").matches) return;
+        document.body.classList.add("has-custom-cursor");
+        const cursor = document.getElementById("cursor");
+        const ring = document.getElementById("cursorRing");
+        const label = document.getElementById("cursorLabel");
+        gsap.set(cursor, { xPercent: -50, yPercent: -50 });
+        const xTo = gsap.quickTo(cursor, "x", { duration: 0.28, ease: "power3.out" });
+        const yTo = gsap.quickTo(cursor, "y", { duration: 0.28, ease: "power3.out" });
+        let visible = false;
+        let onTrack = false;
+        window.addEventListener("mousemove", (e) => {
+          xTo(e.clientX);
+          yTo(e.clientY);
+          if (!visible) {
+            visible = true;
+            gsap.to(cursor, { opacity: 1, duration: 0.35, ease: "power4.out" });
+          }
+        });
+        document.querySelectorAll("a, button").forEach((el) => {
+          el.addEventListener("mouseenter", () => {
+            if (onTrack) return;
+            gsap.to(ring, { width: 28, height: 28, backgroundColor: "rgba(36,130,50,0.2)", duration: 0.35, ease: "power4.out" });
+          });
+          el.addEventListener("mouseleave", () => {
+            if (onTrack) return;
+            gsap.to(ring, { width: 14, height: 14, backgroundColor: "rgba(36,130,50,1)", duration: 0.35, ease: "power4.out" });
+          });
+        });
+      })();
+
+      /* ---------- Magnetic buttons ---------- */
+      document.querySelectorAll(".magnetic").forEach((el) => {
+        const arrow = el.querySelector(".btn-arrow");
+        el.addEventListener("mousemove", (e) => {
+          if (prefersReducedMotion()) return;
+          const rect = el.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+          gsap.to(el, { x: x * 0.22, y: y * 0.22, duration: 0.45, ease: "power3.out" });
+        });
+        el.addEventListener("mouseenter", () => {
+          if (arrow) gsap.to(arrow, { x: 4, duration: 0.35, ease: "power3.out" });
+        });
+        el.addEventListener("mouseleave", () => {
+          gsap.to(el, { x: 0, y: 0, duration: 0.7, ease: "elastic.out(1, 0.45)" });
+          if (arrow) gsap.to(arrow, { x: 0, duration: 0.35, ease: "power3.out" });
+        });
+      });
+
+      /* ---------- Hero ---------- */
+      (function initHero() {
+        const root = document.getElementById("top");
+        const chars = root.querySelectorAll(".hero-char");
+        const words = root.querySelectorAll(".hero-word");
+        const content = document.getElementById("heroContent");
+        const media = document.getElementById("heroMedia");
+        const bg = document.getElementById("heroBg");
+        const videoLayer = document.getElementById("heroVideoLayer");
+        const scrollCue = document.getElementById("heroScroll");
+        const video = document.getElementById("heroVideo");
+
+        if (video && !prefersReducedMotion()) video.play().catch(function () {});
+
+        if (prefersReducedMotion()) {
+          gsap.set([chars, content], { opacity: 1, y: 0, clearProps: "transform" });
+          gsap.set(media, { scale: 1, borderRadius: 0 });
+          return;
+        }
+
+        gsap.set(chars, { yPercent: 110, opacity: 0 });
+        gsap.set(content, { opacity: 0, y: 24 });
+        gsap.set(bg, { scale: 1.15 });
+        gsap.set(videoLayer, { opacity: 1, scale: 1.08 });
+        gsap.set(scrollCue, { opacity: 0 });
+        gsap.set(media, { scale: 0.42, borderRadius: 24, transformOrigin: "50% 50%" });
+
+        gsap.timeline({ defaults: { ease: "power4.out" } })
+          .fromTo(videoLayer, { opacity: 0, scale: 1.15 }, { opacity: 1, scale: 1.08, duration: 2.4, ease: "expo.out" }, 0)
+          .to(bg, { scale: 1, duration: 2.2 }, 0)
+          .to(chars, { yPercent: 0, opacity: 1, duration: 1.1, stagger: 0.018 }, 0.15)
+          .to(content, { opacity: 1, y: 0, duration: 1, ease: "expo.out" }, 0.55)
+          .to(scrollCue, { opacity: 1, duration: 0.8, ease: "expo.out" }, 0.9);
+
+        const scrubTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: root,
+            start: "top top",
+            end: "+=150%",
+            pin: true,
+            scrub: 1,
+            anticipatePin: 1,
+          },
+        });
+
+        scrubTl
+          .fromTo(words, { scale: 1, opacity: 1 }, { scale: 3, opacity: 0, ease: "none", immediateRender: false }, 0)
+          .fromTo(content, { opacity: 1, y: 0 }, { opacity: 0, y: -40, ease: "none", immediateRender: false }, 0)
+          .fromTo(scrollCue, { opacity: 1 }, { opacity: 0, ease: "none", immediateRender: false }, 0)
+          .fromTo(media, { scale: 0.42, borderRadius: 24 }, { scale: 1, borderRadius: 0, ease: "none", immediateRender: false }, 0)
+          .fromTo(bg, { scale: 1 }, { scale: 1.08, ease: "none", immediateRender: false }, 0)
+          .fromTo(videoLayer, { opacity: 1, scale: 1.08 }, { opacity: 0, scale: 1.2, ease: "none", immediateRender: false }, 0);
+      })();
+
+      /* ---------- Value prop ---------- */
+      (function initValue() {
+        const root = document.getElementById("promise");
+        const words = root.querySelectorAll(".vp-word");
+        if (prefersReducedMotion()) {
+          gsap.set(words, { opacity: 1, color: "#0d1f12" });
+          return;
+        }
+        gsap.set(words, { opacity: 0.18, color: "rgba(13,31,18,0.22)" });
+        gsap.to(words, {
+          opacity: 1,
+          color: "#0d1f12",
+          stagger: 0.08,
+          ease: "none",
+          scrollTrigger: {
+            trigger: root,
+            start: "top top",
+            end: "+=120%",
+            pin: true,
+            scrub: 0.6,
+            anticipatePin: 1,
+          },
+        });
+      })();
+
+      /* ---------- Styles reveal ---------- */
+      if (!prefersReducedMotion()) {
+        gsap.from("#styles .style-reveal", {
+          opacity: 0,
+          y: 32,
+          duration: 0.9,
+          stagger: 0.07,
+          ease: "power4.out",
+          scrollTrigger: { trigger: "#styles", start: "top 72%", toggleActions: "play none none reverse" },
+        });
+      }
+
+      /* ---------- Destinations ---------- */
+      (function initDestinations() {
+        const root = document.getElementById("destinations");
+        const slides = gsap.utils.toArray(".spot-slide");
+        const panels = gsap.utils.toArray(".spot-copy");
+        const tabs = gsap.utils.toArray(".spot-tab");
+        const counter = root.querySelector(".spot-counter");
+        const progress = document.getElementById("destProgress");
+        const total = DATA.destinations.length;
+        let activeIndex = -1;
+
+        function setActive(i) {
+          if (i === activeIndex || !DATA.destinations[i]) return;
+          activeIndex = i;
+          const duration = prefersReducedMotion() ? 0 : 0.65;
+          slides.forEach((slide, si) => {
+            gsap.to(slide, { opacity: si === i ? 1 : 0, scale: si === i ? 1 : 1.04, duration, ease: "power3.out", overwrite: "auto" });
+          });
+          panels.forEach((panel, pi) => {
+            const on = pi === i;
+            gsap.to(panel, { opacity: on ? 1 : 0, y: on ? 0 : 16, duration: duration * 0.85, ease: "power3.out", overwrite: "auto", pointerEvents: on ? "auto" : "none" });
+          });
+          tabs.forEach((tab, ti) => {
+            const on = ti === i;
+            tab.setAttribute("aria-selected", on ? "true" : "false");
+            gsap.to(tab, { opacity: on ? 1 : 0.4, duration: duration * 0.7, ease: "power2.out", overwrite: "auto" });
+          });
+          if (counter) counter.textContent = String(i + 1).padStart(2, "0");
+          if (progress) gsap.to(progress, { scaleX: (i + 1) / total, duration: duration * 0.9, ease: "power2.out", overwrite: "auto" });
+        }
+
+        gsap.set(slides, { opacity: 0, scale: 1.04 });
+        gsap.set(slides[0], { opacity: 1, scale: 1 });
+        gsap.set(panels, { opacity: 0, y: 16, pointerEvents: "none" });
+        gsap.set(panels[0], { opacity: 1, y: 0, pointerEvents: "auto" });
+        gsap.set(tabs, { opacity: 0.4 });
+        gsap.set(tabs[0], { opacity: 1 });
+        gsap.set(progress, { scaleX: 1 / total, transformOrigin: "left center" });
+        activeIndex = 0;
+
+        tabs.forEach((tab, i) => {
+          tab.addEventListener("mouseenter", () => setActive(i));
+          tab.addEventListener("focus", () => setActive(i));
+          tab.addEventListener("click", (e) => { e.preventDefault(); setActive(i); });
+        });
+
+        if (prefersReducedMotion()) return;
+
+        ScrollTrigger.create({
+          trigger: root,
+          start: "top top",
+          end: () => "+=" + total * 320,
+          pin: true,
+          scrub: 0.55,
+          anticipatePin: 1,
+          onUpdate: (self) => {
+            const i = Math.min(total - 1, Math.floor(self.progress * total));
+            setActive(i);
+          },
+        });
+      })();
+
+      /* ---------- Testimonials stack ---------- */
+      (function initLove() {
+        const stage = document.getElementById("stackStage");
+        const dots = document.getElementById("stackDots");
+        const VISIBLE = 3;
+        let active = 0;
+        let animating = false;
+
+        DATA.testimonials.forEach((_, i) => {
+          const b = document.createElement("button");
+          b.type = "button";
+          b.className = "stack-dot" + (i === 0 ? " is-active" : "");
+          b.setAttribute("role", "tab");
+          b.setAttribute("aria-label", "Go to story " + (i + 1));
+          b.addEventListener("click", () => goTo(i, i > active ? 1 : -1));
+          dots.appendChild(b);
+        });
+
+        function render() {
+          stage.innerHTML = "";
+          const order = [];
+          for (let depth = 0; depth < Math.min(VISIBLE, DATA.testimonials.length); depth++) {
+            const i = (active + depth) % DATA.testimonials.length;
+            order.push({ depth, i, item: DATA.testimonials[i] });
+          }
+          order.reverse().forEach(({ depth, i, item }) => {
+            const isFront = depth === 0;
+            const scale = 1 - depth * 0.06;
+            const y = depth * 28;
+            const x = depth * (depth % 2 === 0 ? 10 : -10);
+            const rot = depth * (depth % 2 === 0 ? 1.5 : -1.5);
+            const opacity = 1 - depth * 0.08;
+            const card = document.createElement("article");
+            card.className = "stack-card" + (isFront ? " is-front" : "");
+            card.style.zIndex = String(VISIBLE - depth);
+            card.style.transform = "translate(" + x + "px, " + y + "px) scale(" + scale + ") rotate(" + rot + "deg)";
+            card.style.opacity = String(opacity);
+            if (!isFront) card.style.pointerEvents = "none";
+            card.innerHTML =
+              '<p class="trip font-body">' + item.trip + "</p>" +
+              '<p class="quote">\u201C' + item.quote + '\u201D</p>' +
+              '<div class="foot"><div><p class="name font-body">' + item.name + "</p>" +
+              (item.location ? '<p class="loc font-body">' + item.location + "</p>" : "") +
+              '</div><span class="count font-body">' + String(i + 1).padStart(2, "0") + " / " + String(DATA.testimonials.length).padStart(2, "0") + "</span></div>";
+            if (isFront) {
+              card.tabIndex = 0;
+              card.setAttribute("role", "button");
+              card.addEventListener("click", next);
+              card.addEventListener("keydown", (e) => {
+                if (e.key === "Enter" || e.key === " ") { e.preventDefault(); next(); }
+              });
+            }
+            stage.appendChild(card);
+          });
+          dots.querySelectorAll(".stack-dot").forEach((d, i) => d.classList.toggle("is-active", i === active));
+          if (!prefersReducedMotion()) {
+            const front = stage.querySelector(".stack-card.is-front");
+            if (front) {
+              gsap.fromTo(front, { opacity: 0.7, y: 16, scale: 0.97 }, { opacity: 1, y: 0, scale: 1, duration: 0.45, ease: "power3.out" });
+            }
+          }
+        }
+
+        function goTo(nextIndex, direction) {
+          if (animating || nextIndex === active) return;
+          const total = DATA.testimonials.length;
+          const i = ((nextIndex % total) + total) % total;
+          if (prefersReducedMotion()) {
+            active = i;
+            render();
+            return;
+          }
+          animating = true;
+          const front = stage.querySelector(".stack-card.is-front");
+          if (!front) { active = i; render(); animating = false; return; }
+          gsap.to(front, {
+            x: direction * 48,
+            y: direction > 0 ? -24 : 18,
+            rotation: direction * 7,
+            opacity: 0,
+            duration: 0.38,
+            ease: "power3.in",
+            onComplete: () => { active = i; render(); animating = false; },
+          });
+        }
+
+        function next() { goTo(active + 1, 1); }
+        function prev() { goTo(active - 1, -1); }
+
+        document.getElementById("stackNext").addEventListener("click", next);
+        document.getElementById("stackPrev").addEventListener("click", prev);
+        render();
+
+        if (!prefersReducedMotion()) {
+          gsap.from("#love .love-reveal", {
+            opacity: 0,
+            y: 28,
+            duration: 0.9,
+            stagger: 0.08,
+            ease: "power4.out",
+            scrollTrigger: { trigger: "#love", start: "top 78%", toggleActions: "play none none reverse" },
+          });
+        }
+      })();
+
+      /* ---------- Metrics ---------- */
+      (function initMetrics() {
+        const root = document.getElementById("proof");
+        const counters = gsap.utils.toArray(".metric-value");
+        const reduced = prefersReducedMotion();
+
+        counters.forEach((el) => {
+          const end = Number(el.dataset.value);
+          const decimals = Number(el.dataset.decimals || 0);
+          const suffix = el.dataset.suffix || "";
+          const format = (v) => (decimals > 0 ? v.toFixed(decimals) : String(Math.round(v))) + suffix;
+          if (reduced) { el.textContent = format(end); return; }
+          const obj = { val: 0 };
+          gsap.to(obj, {
+            val: end,
+            duration: 1.8,
+            ease: "power4.out",
+            scrollTrigger: { trigger: el, start: "top 80%", toggleActions: "play none none none" },
+            onUpdate: () => { el.textContent = format(obj.val); },
+          });
+        });
+
+        if (reduced) return;
+        const a = document.getElementById("marqueeA");
+        const b = document.getElementById("marqueeB");
+        gsap.set(a, { xPercent: 0 });
+        gsap.set(b, { xPercent: -50 });
+        const loopA = gsap.to(a, { xPercent: -50, duration: 28, ease: "none", repeat: -1 });
+        const loopB = gsap.to(b, { xPercent: 0, duration: 32, ease: "none", repeat: -1 });
+        ScrollTrigger.create({
+          trigger: root,
+          start: "top bottom",
+          end: "bottom top",
+          onUpdate: (self) => {
+            const v = self.getVelocity();
+            const abs = Math.min(Math.abs(v) / 1200, 2.5);
+            const dir = v < 0 ? -1 : 1;
+            const skew = gsap.utils.clamp(-12, 12, dir * abs * 6);
+            const timeScale = 1 + abs * 1.8;
+            loopA.timeScale(timeScale);
+            loopB.timeScale(timeScale);
+            gsap.to([a, b], { skewX: skew, duration: 0.35, ease: "power3.out", overwrite: "auto" });
+          },
+          onLeave: () => { gsap.to([a, b], { skewX: 0, duration: 0.6 }); loopA.timeScale(1); loopB.timeScale(1); },
+          onLeaveBack: () => { gsap.to([a, b], { skewX: 0, duration: 0.6 }); loopA.timeScale(1); loopB.timeScale(1); },
+        });
+      })();
+
+      /* ---------- Footer ---------- */
+      if (!prefersReducedMotion()) {
+        gsap.from("#contact .footer-reveal", {
+          y: 60,
+          opacity: 0,
+          duration: 1.1,
+          stagger: 0.08,
+          ease: "power4.out",
+          scrollTrigger: { trigger: "#contact", start: "top 75%", toggleActions: "play none none reverse" },
+        });
+      }
+
+      window.addEventListener("resize", () => ScrollTrigger.refresh());
+      ScrollTrigger.refresh();
+    })();
+  </script>
+</body>
+</html>
